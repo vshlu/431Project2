@@ -129,7 +129,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
 
     //Check associativity of caches to see if latency needs to be modified
     //Check L1D associativity
-    switch (extractConfigPararm(halfBackedConfig, 4){
+    switch (extractConfigPararm(halfBackedConfig, 4)){
         case 2:
             l1Dlat += 1;
         case 4:
@@ -185,7 +185,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
 int validateConfiguration(std::string configuration) {
 	// The below is a necessary, but insufficient condition for validating a
 	// configuration.
-	if (isNumDimConfiguration(configuration){
+	if (isNumDimConfiguration(configuration)){
 	    //Make sure L1 instruction cache block size matches the instruction fetch queue size
 	    if((extractConfigPararm(configuration, 2) / 8) == (extractConfigPararm(configuration, 0))){
 	        //Make sure L2 cache block size is at lease twice L1D (and L1I) cache size
