@@ -20,7 +20,7 @@ using namespace std;
 /*
  * Enter your PSU ID here to select the appropriate dimension scanning order.
  */
-#define MY_PSU_ID 912345679
+#define MY_PSU_ID 969384744
 
 /*
  * Some global variables to track heuristic progress.
@@ -41,15 +41,137 @@ bool isDSEComplete = false;
  */
 std::string generateCacheLatencyParams(string halfBackedConfig) {
 
-	string latencySettings;
+	char latencySettings[3];
 
-	//
-	//YOUR CODE BEGINS HERE
-	//
+	//First retrieve the size of the caches L1D, L1I, and L2
+	int l1DSize;
+    int l1ISize;
+    int l2Size;
+    //Cache size = ((block size * 8) * number of sets) / 1024 (to get KB)
+    l1DSize = ((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 3) / 1024);
+    l1ISize = ((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 5) / 1024);
+    l2Size = ((extractConfigPararm(halfBackedConfig, 8) * 8) * extractConfigPararm(halfBackedConfig, 7) / 1024);
 
-	// This is a dumb implementation.
-	latencySettings = "1 1 1";
+    //Match size to latency for L1D cache
+    int l1Dlat;
+    switch(l1DSize){
+        case 2:
+            l1Dlat = 1;
+            break;
+        case 4:
+            l1Dlat = 2;
+            break;
+        case 8:
+            l1Dlat = 3;
+            break;
+        case 16:
+            l1Dlat = 4;
+            break;
+        case 32:
+            l1Dlat = 5;
+            break;
+        case 64:
+            l1Dlat = 6;
+            break;
+        default:
+            printf("ERROR IN FINDING MATCH FOR L1D CACHE SIZE");
+    }
 
+    //Match size to latency for L1I cache
+    int l1Ilat;
+    switch(l1ISize){
+        case 2:
+            l1Ilat = 1;
+            break;
+        case 4:
+            l1Ilat = 2;
+            break;
+        case 8:
+            l1Ilat = 3;
+            break;
+        case 16:
+            l1Ilat = 4;
+            break;
+        case 32:
+            l1Ilat = 5;
+            break;
+        case 64:
+            l1Ilat = 6;
+            break;
+        default:
+            printf("ERROR IN FINDING MATCH FOR L1I CACHE SIZE");
+    }
+
+    //Match size to latency for L1I cache
+    int l2lat;
+    switch(l2Size){
+        case 32:
+            l2lat = 5;
+            break;
+        case 64:
+            l2lat = 6;
+            break;
+        case 128:
+            l2lat = 7;
+            break;
+        case 256:
+            l2lat = 8;
+            break;
+        case 512:
+            l2lat = 9;
+            break;
+        case 1024:
+            l2lat = 10;
+            break;
+        default:
+            printf("ERROR IN FINDING MATCH FOR L2 CACHE SIZE");
+    }
+
+    //Check associativity of caches to see if latency needs to be modified
+    //Check L1D associativity
+    switch (extractConfigPararm(halfBackedConfig, 4){
+        case 2:
+            l1Dlat += 1;
+        case 4:
+            l1Dlat += 2;
+        default:
+            //directly mapped
+            l1Dlat = l1Dlat;
+    }
+    //Check L1I associativity
+    switch (extractConfigPararm(halfBackedConfig, 6){
+        case 2:
+            l1Ilat += 1;
+        case 4:
+            l1Ilat += 2;
+        default:
+            //directly mapped
+            l1Ilat = l1Ilat;
+    }
+    //Check L2 associativity
+    switch (extractConfigPararm(halfBackedConfig, 9){
+        case 2:
+            l2lat += 1;
+        case 4:
+            l2lat += 2;
+        case 8:
+            l2lat += 3;
+        case 16:
+            l2lat += 4;
+        default:
+            //directly mapped
+            l2lat = l2lat;
+    }
+
+    //Calculate the cell to pass for latency settings
+    int l1DCell = l1Dlat - 1;
+    int l1ICell = l1Ilat - 1;
+    int l2Cell = l2lat - 5;
+
+    //Pass calculated cells into collective string
+	latencySettings[0] = (char)l1DCell;
+    latencySettings[1] = (char)l1ICell;
+    latencySettings[2] = (char)l2Cell;
 	//
 	//YOUR CODE ENDS HERE
 	//
@@ -61,12 +183,38 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
  * Returns 1 if configuration is valid, else 0
  */
 int validateConfiguration(std::string configuration) {
-
-	// FIXME - YOUR CODE HERE
-
 	// The below is a necessary, but insufficient condition for validating a
 	// configuration.
-	return isNumDimConfiguration(configuration);
+	if (isNumDimConfiguration(configuration){
+	    //Make sure L1 instruction cache block size matches the instruction fetch queue size
+	    if((extractConfigPararm(configuration, 2) / 8) == (extractConfigPararm(configuration, 0))){
+	        //Make sure L2 cache block size is at lease twice L1D (and L1I) cache size
+	        if(extractConfigPararm(configuration, 8) >= 2 * ((extractConfigPararm(configuration, 2)))){
+	            //Make sure cache sizes are correct
+	            int flag = 0;
+	            //L1I and L1D cache must be between 2KB and 64KB
+                int l1DSize = ((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 3) / 1024);
+                int l1ISize = ((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 5) / 1024);
+                //L2 cache must be between 32KB and 1024KB
+                int l2Size = ((extractConfigPararm(halfBackedConfig, 8) * 8) * extractConfigPararm(halfBackedConfig, 7) / 1024);
+                if(l1DSize >= 2 && l1DSize <= 64 && l1ISize >= 2 && l1ISize <= 64 && l2Size >= 64 && l2Size <= 1024){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }
+	        }
+	        else{
+                return 0;
+	        }
+	    }
+	    else{
+            return 0;
+	    }
+	}
+	else{
+	    return 0;
+	}
 }
 
 /*
