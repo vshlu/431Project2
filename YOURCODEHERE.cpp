@@ -196,10 +196,10 @@ int validateConfiguration(std::string configuration) {
 	            //Make sure cache sizes are correct
 	            int flag = 0;
 	            //L1I and L1D cache must be between 2KB and 64KB
-                int l1DSize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 3)) * extractConfigPararm(halfBackedConfig, 4) / 1024);
-                int l1ISize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 5)) * extractConfigPararm(halfBackedConfig, 6) / 1024);
+                int l1DSize = (((extractConfigPararm(configuration, 2) * 8) * extractConfigPararm(configuration, 3)) * extractConfigPararm(configuration, 4) / 1024);
+                int l1ISize = (((extractConfigPararm(configuration, 2) * 8) * extractConfigPararm(configuration, 5)) * extractConfigPararm(configuration, 6) / 1024);
                 //L2 cache must be between 32KB and 1024KB
-                int l2Size = (((extractConfigPararm(halfBackedConfig, 8) * 8) * extractConfigPararm(halfBackedConfig, 7)) * extractConfigPararm(halfBackedConfig, 9) / 1024);
+                int l2Size = (((extractConfigPararm(configuration, 8) * 8) * extractConfigPararm(configuration, 7)) * extractConfigPararm(configuration, 9) / 1024);
                 if(l1DSize >= 2 && l1DSize <= 64 && l1ISize >= 2 && l1ISize <= 64 && l2Size >= 64 && l2Size <= 1024){
                     return 1;
                 }
