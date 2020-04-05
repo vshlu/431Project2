@@ -215,18 +215,18 @@ int validateConfiguration(std::string configuration) {
 	// configuration.
 	//Could probably make this block global but
     //Find block size
-    int l1DBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
-    int l1IBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
-    int l2BlockSize = ul2block[extractConfigPararm(halfBackedConfig, 8)];
+    int l1DBlockSize = l1block[extractConfigPararm(configuration, 2)];
+    int l1IBlockSize = l1block[extractConfigPararm(configuration, 2)];
+    int l2BlockSize = ul2block[extractConfigPararm(configuration, 8)];
 
     //Find set size
-    int l1DSetSize = dl1sets[extractConfigPararm(halfBackedConfig, 3)];
-    int l1ISetSize = il1sets[extractConfigPararm(halfBackedConfig, 5)];
-    int l2SetSize = ul2sets[extractConfigPararm(halfBackedConfig, 7)];
+    int l1DSetSize = dl1sets[extractConfigPararm(configuration, 3)];
+    int l1ISetSize = il1sets[extractConfigPararm(configuration, 5)];
+    int l2SetSize = ul2sets[extractConfigPararm(configuration, 7)];
     //Find associativity
-    int l1DAssoc = dl1assoc[extractConfigPararm(halfBackedConfig, 4)];
-    int l1IAssoc = il1assoc[extractConfigPararm(halfBackedConfig, 6)];
-    int l2Assoc =  ul2assoc[extractConfigPararm(halfBackedConfig, 9)];
+    int l1DAssoc = dl1assoc[extractConfigPararm(configuration, 4)];
+    int l1IAssoc = il1assoc[extractConfigPararm(configuration, 6)];
+    int l2Assoc =  ul2assoc[extractConfigPararm(configuration, 9)];
     //Calculate the size of the caches L1D, L1I, and L2
     //Cache size = ((block size * 8) * number of sets) / 1024 (to get KB)
     int l1DSize = (((l1DBlockSize * 8) * l1DSetSize) * l1DAssoc) / 1024;
