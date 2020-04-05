@@ -43,22 +43,37 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l1block[4] = {8,16,32,64};
     int ul2block[4] = {16,32,64,128};
 
+    int dl1sets[9] = {32,64,128,256,512,1024,2048,4096,8192};
+    int il1sets[9] = {32,64,128,256,512,1024,2048,4096,8192};
+    int ul2sets[10] = {256,512,1024,2048,4096,8192,16384,32768,65536,131072};
+
+    int dl1assoc[3] = {1,2,4};
+    int il1assoc[3] = {1,2,4};
+    int ul2assoc[5] = {1,2,4,8,16};
+
 	char latencySettings[3];
 
 	//Find block size
 	int l1DBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
     int l1IBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
     int l2BlockSize = ul2block[extractConfigPararm(halfBackedConfig, 8)];
-    cout << "l1DBlockSize: " <<  l1DBlockSize;
-	//First retrieve the size of the caches L1D, L1I, and L2
-	int l1DSize;
-    int l1ISize;
-    int l2Size;
-    //Cache size = ((block size * 8) * number of sets) / 1024 (to get KB)
-    l1DSize = (((l1DBlockSize * 8) * extractConfigPararm(halfBackedConfig, 3)) * extractConfigPararm(halfBackedConfig, 4) / 1024);
-    l1ISize = (((l1IBlockSize * 8) * extractConfigPararm(halfBackedConfig, 5)) * extractConfigPararm(halfBackedConfig, 6) / 1024);
-    l2Size = (((l2BlockSize * 8) * extractConfigPararm(halfBackedConfig, 7)) * extractConfigPararm(halfBackedConfig, 9) / 1024);
 
+    //Find set size
+    int l1DSetSize = dl1sets[extractConfigPararm(halfBackedConfig, 3)];
+    int l1ISetSize = il1sets[extractConfigPararm(halfBackedConfig, 5)];
+    int l2SetSize = ul2sets[extractConfigPararm(halfBackedConfig, 7)];
+    //Find associativity
+    int l1DAssoc = dl1assoc[extractConfigPararm(halfBackedConfig, 4)];
+    int l1IAssoc = il1assoc[extractConfigPararm(halfBackedConfig, 6)];
+    int l2Assoc =  ul2assoc[extractConfigPararm(halfBackedConfig, 9)];
+	//Calculate the size of the caches L1D, L1I, and L2
+    //Cache size = ((block size * 8) * number of sets) / 1024 (to get KB)
+    int l1DSize = (((l1DBlockSize * 8) * l1DSetSize) * l1DAssoc) / 1024;
+    int l1ISize = (((l1IBlockSize * 8) * l1ISetSize) * l1IAssoc) / 1024;
+    int l2Size = (((l2BlockSize * 8) * l2SetSize) * l2Assoc) / 1024;
+    cout << "l1DSize: " <<  l1DSize;
+    cout << "l1ISize: " <<  l1ISize;
+    cout << "l2Size: " <<  l2Size;
     //Match size to latency for L1D cache
     int l1Dlat;
     switch(l1DSize){
@@ -139,7 +154,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
 
     //Check associativity of caches to see if latency needs to be modified
     //Check L1D associativity
-    switch (extractConfigPararm(halfBackedConfig, 4)){
+    switch (l1DAssoc){
         case 2:
             l1Dlat += 1;
         case 4:
@@ -149,7 +164,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             l1Dlat = l1Dlat;
     }
     //Check L1I associativity
-    switch (extractConfigPararm(halfBackedConfig, 6)){
+    switch (l1IAssoc){
         case 2:
             l1Ilat += 1;
         case 4:
@@ -159,7 +174,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             l1Ilat = l1Ilat;
     }
     //Check L2 associativity
-    switch (extractConfigPararm(halfBackedConfig, 9)){
+    switch (l2Assoc){
         case 2:
             l2lat += 1;
         case 4:
