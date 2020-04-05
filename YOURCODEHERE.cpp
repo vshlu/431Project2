@@ -48,9 +48,9 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l1ISize;
     int l2Size;
     //Cache size = ((block size * 8) * number of sets) / 1024 (to get KB)
-    l1DSize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 3)) / 1024);
-    l1ISize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 5)) / 1024);
-    l2Size = (((extractConfigPararm(halfBackedConfig, 8) * 8) * extractConfigPararm(halfBackedConfig, 7)) / 1024);
+    l1DSize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 3)) * extractConfigPararm(halfBackedConfig, 4) / 1024);
+    l1ISize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 5)) * extractConfigPararm(halfBackedConfig, 6) / 1024);
+    l2Size = (((extractConfigPararm(halfBackedConfig, 8) * 8) * extractConfigPararm(halfBackedConfig, 7)) * extractConfigPararm(halfBackedConfig, 9) / 1024);
 
     //Match size to latency for L1D cache
     int l1Dlat;
@@ -74,7 +74,8 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             l1Dlat = 6;
             break;
         default:
-            printf("ERROR IN FINDING MATCH FOR L1D CACHE SIZE");
+            //Set to largest size
+            l1Dlat = 6;
     }
 
     //Match size to latency for L1I cache
@@ -99,7 +100,8 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             l1Ilat = 6;
             break;
         default:
-            printf("ERROR IN FINDING MATCH FOR L1I CACHE SIZE");
+            //Set to largest size
+            l1Dlat = 6;
     }
 
     //Match size to latency for L1I cache
@@ -124,7 +126,8 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             l2lat = 10;
             break;
         default:
-            printf("ERROR IN FINDING MATCH FOR L2 CACHE SIZE");
+            //Set to largest size
+            l1Dlat = 10;
     }
 
     //Check associativity of caches to see if latency needs to be modified
@@ -193,10 +196,10 @@ int validateConfiguration(std::string configuration) {
 	            //Make sure cache sizes are correct
 	            int flag = 0;
 	            //L1I and L1D cache must be between 2KB and 64KB
-                int l1DSize = ((extractConfigPararm(configuration, 2) * 8) * extractConfigPararm(configuration, 3) / 1024);
-                int l1ISize = ((extractConfigPararm(configuration, 2) * 8) * extractConfigPararm(configuration, 5) / 1024);
+                int l1DSize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 3)) * extractConfigPararm(halfBackedConfig, 4) / 1024);
+                int l1ISize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 5)) * extractConfigPararm(halfBackedConfig, 6) / 1024);
                 //L2 cache must be between 32KB and 1024KB
-                int l2Size = ((extractConfigPararm(configuration, 8) * 8) * extractConfigPararm(configuration, 7) / 1024);
+                int l2Size = (((extractConfigPararm(halfBackedConfig, 8) * 8) * extractConfigPararm(halfBackedConfig, 7)) * extractConfigPararm(halfBackedConfig, 9) / 1024);
                 if(l1DSize >= 2 && l1DSize <= 64 && l1ISize >= 2 && l1ISize <= 64 && l2Size >= 64 && l2Size <= 1024){
                     return 1;
                 }
