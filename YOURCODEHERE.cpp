@@ -43,6 +43,11 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
 
 	char latencySettings[3];
 
+	//Find block size
+	int l1DBlockSize = extractConfigPararm(halfBackedConfig, 2);
+    int l1IBlockSize = extractConfigPararm(halfBackedConfig, 2);
+    int l2BlockSize = extractConfigPararm(halfBackedConfig, 8);
+    cout << "l1DBlockSize: " <<  l1DBlockSize;
 	//First retrieve the size of the caches L1D, L1I, and L2
 	int l1DSize;
     int l1ISize;
