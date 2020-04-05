@@ -74,9 +74,9 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l1DSize = (((l1DBlockSize * 8) * l1DSetSize) * l1DAssoc) / 1024;
     int l1ISize = (((l1IBlockSize * 8) * l1ISetSize) * l1IAssoc) / 1024;
     int l2Size = (((l2BlockSize * 8) * l2SetSize) * l2Assoc) / 1024;
-    cout << "l1DSize: " <<  l1DSize;
-    cout << "l1ISize: " <<  l1ISize;
-    cout << "l2Size: " <<  l2Size;
+    cout << "l1DSize: " <<  l1DSize << " ";
+    cout << "l1ISize: " <<  l1ISize << " ";
+    cout << "l2Size: " <<  l2Size << " ";
     //Match size to latency for L1D cache
     int l1Dlat;
     switch(l1DSize){
