@@ -40,8 +40,8 @@ bool isDSEComplete = false;
  * Returns a string similar to "1 1 1"
  */
 std::string generateCacheLatencyParams(string halfBackedConfig) {
-    int l1block[4] = [8,16,32,64];
-    int ul2block[4] = [16,32,64,128];
+    int l1block[4] = {8,16,32,64};
+    int ul2block[4] = {16,32,64,128};
 
 	char latencySettings[3];
 
