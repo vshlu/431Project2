@@ -40,22 +40,24 @@ bool isDSEComplete = false;
  * Returns a string similar to "1 1 1"
  */
 std::string generateCacheLatencyParams(string halfBackedConfig) {
+    int l1block[4] = [8,16,32,64];
+    int ul2block[4] = [16,32,64,128];
 
 	char latencySettings[3];
 
 	//Find block size
-	int l1DBlockSize = extractConfigPararm(halfBackedConfig, 2);
-    int l1IBlockSize = extractConfigPararm(halfBackedConfig, 2);
-    int l2BlockSize = extractConfigPararm(halfBackedConfig, 8);
+	int l1DBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
+    int l1IBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
+    int l2BlockSize = ul2block[extractConfigPararm(halfBackedConfig, 8)];
     cout << "l1DBlockSize: " <<  l1DBlockSize;
 	//First retrieve the size of the caches L1D, L1I, and L2
 	int l1DSize;
     int l1ISize;
     int l2Size;
     //Cache size = ((block size * 8) * number of sets) / 1024 (to get KB)
-    l1DSize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 3)) * extractConfigPararm(halfBackedConfig, 4) / 1024);
-    l1ISize = (((extractConfigPararm(halfBackedConfig, 2) * 8) * extractConfigPararm(halfBackedConfig, 5)) * extractConfigPararm(halfBackedConfig, 6) / 1024);
-    l2Size = (((extractConfigPararm(halfBackedConfig, 8) * 8) * extractConfigPararm(halfBackedConfig, 7)) * extractConfigPararm(halfBackedConfig, 9) / 1024);
+    l1DSize = ((l1DBlockSize * 8) * extractConfigPararm(halfBackedConfig, 3)) * extractConfigPararm(halfBackedConfig, 4) / 1024);
+    l1ISize = (((l1IBlockSize * 8) * extractConfigPararm(halfBackedConfig, 5)) * extractConfigPararm(halfBackedConfig, 6) / 1024);
+    l2Size = (((l2BlockSize * 8) * extractConfigPararm(halfBackedConfig, 7)) * extractConfigPararm(halfBackedConfig, 9) / 1024);
 
     //Match size to latency for L1D cache
     int l1Dlat;
