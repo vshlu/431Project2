@@ -55,7 +55,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l1ISize;
     int l2Size;
     //Cache size = ((block size * 8) * number of sets) / 1024 (to get KB)
-    l1DSize = ((l1DBlockSize * 8) * extractConfigPararm(halfBackedConfig, 3)) * extractConfigPararm(halfBackedConfig, 4) / 1024);
+    l1DSize = (((l1DBlockSize * 8) * extractConfigPararm(halfBackedConfig, 3)) * extractConfigPararm(halfBackedConfig, 4) / 1024);
     l1ISize = (((l1IBlockSize * 8) * extractConfigPararm(halfBackedConfig, 5)) * extractConfigPararm(halfBackedConfig, 6) / 1024);
     l2Size = (((l2BlockSize * 8) * extractConfigPararm(halfBackedConfig, 7)) * extractConfigPararm(halfBackedConfig, 9) / 1024);
 
