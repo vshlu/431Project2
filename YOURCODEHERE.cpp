@@ -32,6 +32,20 @@ unsigned int currentlyExploringDim = 0;
 bool currentDimDone = false;
 bool isDSEComplete = false;
 
+//Gloabals
+int l1block[4] = {8,16,32,64};
+int ul2block[4] = {16,32,64,128};
+
+int dl1sets[9] = {32,64,128,256,512,1024,2048,4096,8192};
+int il1sets[9] = {32,64,128,256,512,1024,2048,4096,8192};
+int ul2sets[10] = {256,512,1024,2048,4096,8192,16384,32768,65536,131072};
+
+int dl1assoc[3] = {1,2,4};
+int il1assoc[3] = {1,2,4};
+int ul2assoc[5] = {1,2,4,8,16};
+
+int width[4] = {1,2,4,8};
+
 /*
  * Given a half-baked configuration containing cache properties, generate
  * latency parameters in configuration string. You will need information about
@@ -40,17 +54,6 @@ bool isDSEComplete = false;
  * Returns a string similar to "1 1 1"
  */
 std::string generateCacheLatencyParams(string halfBackedConfig) {
-    int l1block[4] = {8,16,32,64};
-    int ul2block[4] = {16,32,64,128};
-
-    int dl1sets[9] = {32,64,128,256,512,1024,2048,4096,8192};
-    int il1sets[9] = {32,64,128,256,512,1024,2048,4096,8192};
-    int ul2sets[10] = {256,512,1024,2048,4096,8192,16384,32768,65536,131072};
-
-    int dl1assoc[3] = {1,2,4};
-    int il1assoc[3] = {1,2,4};
-    int ul2assoc[5] = {1,2,4,8,16};
-
 	char latencySettings[3];
 
 	//Find block size
@@ -210,18 +213,36 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
 int validateConfiguration(std::string configuration) {
 	// The below is a necessary, but insufficient condition for validating a
 	// configuration.
+	//Could probably make this block global but
+    //Find block size
+    int l1DBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
+    int l1IBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
+    int l2BlockSize = ul2block[extractConfigPararm(halfBackedConfig, 8)];
+
+    //Find set size
+    int l1DSetSize = dl1sets[extractConfigPararm(halfBackedConfig, 3)];
+    int l1ISetSize = il1sets[extractConfigPararm(halfBackedConfig, 5)];
+    int l2SetSize = ul2sets[extractConfigPararm(halfBackedConfig, 7)];
+    //Find associativity
+    int l1DAssoc = dl1assoc[extractConfigPararm(halfBackedConfig, 4)];
+    int l1IAssoc = il1assoc[extractConfigPararm(halfBackedConfig, 6)];
+    int l2Assoc =  ul2assoc[extractConfigPararm(halfBackedConfig, 9)];
+    //Calculate the size of the caches L1D, L1I, and L2
+    //Cache size = ((block size * 8) * number of sets) / 1024 (to get KB)
+    int l1DSize = (((l1DBlockSize * 8) * l1DSetSize) * l1DAssoc) / 1024;
+    int l1ISize = (((l1IBlockSize * 8) * l1ISetSize) * l1IAssoc) / 1024;
+    int l2Size = (((l2BlockSize * 8) * l2SetSize) * l2Assoc) / 1024;
+
+    int fetchQSize = width[extractConfigPararm(configuration, 0)];
+
 	if (isNumDimConfiguration(configuration)){
 	    //Make sure L1 instruction cache block size matches the instruction fetch queue size
-	    if((extractConfigPararm(configuration, 2) / 8) == (extractConfigPararm(configuration, 0))){
+	    if((l1DBlockSize / 8) == fetchQSize){
 	        //Make sure L2 cache block size is at lease twice L1D (and L1I) cache size
-	        if(extractConfigPararm(configuration, 8) >= 2 * ((extractConfigPararm(configuration, 2)))){
+	        if(l2BlockSize >= (2 * l1DBlockSize)){
 	            //Make sure cache sizes are correct
-	            int flag = 0;
 	            //L1I and L1D cache must be between 2KB and 64KB
-                int l1DSize = (((extractConfigPararm(configuration, 2) * 8) * extractConfigPararm(configuration, 3)) * extractConfigPararm(configuration, 4) / 1024);
-                int l1ISize = (((extractConfigPararm(configuration, 2) * 8) * extractConfigPararm(configuration, 5)) * extractConfigPararm(configuration, 6) / 1024);
                 //L2 cache must be between 32KB and 1024KB
-                int l2Size = (((extractConfigPararm(configuration, 8) * 8) * extractConfigPararm(configuration, 7)) * extractConfigPararm(configuration, 9) / 1024);
                 if(l1DSize >= 2 && l1DSize <= 64 && l1ISize >= 2 && l1ISize <= 64 && l2Size >= 64 && l2Size <= 1024){
                     return 1;
                 }
