@@ -54,7 +54,7 @@ int width[4] = {1,2,4,8};
  * Returns a string similar to "1 1 1"
  */
 std::string generateCacheLatencyParams(string halfBackedConfig) {
-	char latencySettings[3];
+	string latencySettings;
 
 	//Find block size
 	int l1DBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
@@ -197,9 +197,12 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l2Cell = l2lat - 5;
 
     //Pass calculated cells into collective string
-	latencySettings[0] = (char)l1DCell;
-    latencySettings[1] = (char)l1ICell;
-    latencySettings[2] = (char)l2Cell;
+	string s1 = to_string(l1DCell);
+    string s2 = to_string(l1ICell);
+    string s3 = to_string(l2Cell);
+
+    latencySettings = s1 + " " + s2 + " " + s3;
+    cout << "latencySettings: " << latencySettings;
 	//
 	//YOUR CODE ENDS HERE
 	//
@@ -235,32 +238,25 @@ int validateConfiguration(std::string configuration) {
 
     int fetchQSize = width[extractConfigPararm(configuration, 0)];
 
-	if (isNumDimConfiguration(configuration)){
-	    //Make sure L1 instruction cache block size matches the instruction fetch queue size
-	    if((l1DBlockSize / 8) == fetchQSize){
-	        //Make sure L2 cache block size is at lease twice L1D (and L1I) cache size
-	        if(l2BlockSize >= (2 * l1DBlockSize)){
-	            //Make sure cache sizes are correct
-	            //L1I and L1D cache must be between 2KB and 64KB
-                //L2 cache must be between 32KB and 1024KB
-                if(l1DSize >= 2 && l1DSize <= 64 && l1ISize >= 2 && l1ISize <= 64 && l2Size >= 64 && l2Size <= 1024){
-                    return 1;
-                }
-                else{
-                    return 0;
-                }
-	        }
-	        else{
-                return 0;
-	        }
-	    }
-	    else{
-            return 0;
-	    }
-	}
-	else{
-	    return 0;
-	}
+    int flag = 1;
+    //Configuration is incorrect size
+	if(!isNumDimConfiguration(configuration)) {
+        flag = 0;
+    }
+	//Make sure L1 instruction cache block size matches the instruction fetch queue size
+	if((l1DBlockSize / 8) != fetchQSize) {
+        flag = 0;
+    }
+	//Make sure L2 cache block size is at lease twice L1D (and L1I) cache size
+	if(l2BlockSize >= (2 * l1DBlockSize)) {
+        //Make sure cache sizes are correct
+        //L1I and L1D cache must be between 2KB and 64KB
+        //L2 cache must be between 32KB and 1024KB
+        if (l1DSize >= 2 && l1DSize <= 64 && l1ISize >= 2 && l1ISize <= 64 && l2Size >= 64 && l2Size <= 1024) {
+            return 1;
+        }
+    }
+    return flag;
 }
 
 /*
