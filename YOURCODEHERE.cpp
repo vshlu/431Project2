@@ -197,15 +197,9 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l2Cell = l2lat - 5;
 
     //Pass calculated cells into collective string
-	stringstream s1 << l1DCell;
-	string sOne;
-	s1 >> sOne;
-    stringstream s2 << l1ICell;
-    string sTwo;
-    s2 >> sTwo;
-    stringstream s3 << l2Cell;
-    string sThree;
-    s3 >> sThree;
+    std::string s1 = std::to_string(l1DCell);
+    std::string s2 = std::to_string(l1ICell);
+    std::string s3 = std::to_string(l2Cell);
 
     latencySettings = s1 + " " + s2 + " " + s3;
     cout << "latencySettings: " << latencySettings;
