@@ -54,7 +54,7 @@ int width[4] = {1,2,4,8};
  * Returns a string similar to "1 1 1"
  */
 std::string generateCacheLatencyParams(string halfBackedConfig) {
-	string latencySettings;
+	//string latencySettings;
 
 	//Find block size
 	int l1DBlockSize = l1block[extractConfigPararm(halfBackedConfig, 2)];
@@ -197,17 +197,14 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l2Cell = l2lat - 5;
 
     //Pass calculated cells into collective string
-    std::string s1 = std::to_string(l1DCell);
-    std::string s2 = std::to_string(l1ICell);
-    std::string s3 = std::to_string(l2Cell);
+    stringstream latencySettings << l1DCell << " " << l1ICell << " " << l2Cell;
 
-    latencySettings = s1 + " " + s2 + " " + s3;
-    cout << "latencySettings: " << latencySettings;
+    cout << "latencySettings: " << latencySettings.str();
 	//
 	//YOUR CODE ENDS HERE
 	//
 
-	return latencySettings;
+	return latencySettings.str();
 }
 
 /*
