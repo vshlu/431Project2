@@ -100,7 +100,8 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             break;
         default:
             //Set to largest size
-            l1Dlat = 6;
+            l1Dlat = 6
+            break;
     }
     cout<<"l1DLat: " << l1Dlat;
     //Match size to latency for L1I cache
@@ -127,6 +128,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
         default:
             //Set to largest size
             l1Ilat = 6;
+            break;
     }
 
     //Match size to latency for L2 cache
@@ -153,6 +155,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
         default:
             //Set to largest size
             l2lat = 10;
+            break;
     }
 
     //Check associativity of caches to see if latency needs to be modified
@@ -160,36 +163,47 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     switch (l1DAssoc){
         case 2:
             l1Dlat += 1;
+            break;
         case 4:
             l1Dlat += 2;
+            break;
         default:
             //directly mapped
             l1Dlat = l1Dlat;
+            break;
     }
     cout<<"l1DLat: " << l1Dlat;
     //Check L1I associativity
     switch (l1IAssoc){
         case 2:
             l1Ilat += 1;
+            break;
         case 4:
             l1Ilat += 2;
+            break;
         default:
             //directly mapped
             l1Ilat = l1Ilat;
+            break;
     }
     //Check L2 associativity
     switch (l2Assoc){
         case 2:
             l2lat += 1;
+            break;
         case 4:
             l2lat += 2;
+            break;
         case 8:
             l2lat += 3;
+            break;
         case 16:
             l2lat += 4;
+            break;
         default:
             //directly mapped
             l2lat = l2lat;
+            break;
     }
 
     //Calculate the cell to pass for latency settings
