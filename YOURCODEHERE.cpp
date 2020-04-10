@@ -320,7 +320,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		for (int dim = 0; dim < currentlyExploringDim; ++dim) {
 			ss << extractConfigPararm(bestConfig, dim) << " ";
 		}
-        cout<<"HERE";
+
 		// Handling for currently exploring dimension.
 		//Dimensions to be explored:
 		//BP
@@ -412,7 +412,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
                 nextValue = nextValue;
                 break;
 		}
-
+        cout<<"HERE";
 		//the if statments in the select will prevent the nextValue from being too big
 		if (nextValue == GLOB_dimensioncardinality[currentlyExploringDim]) {
 			currentDimDone = true;
