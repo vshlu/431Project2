@@ -103,7 +103,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             l1Dlat = 6;
             break;
     }
-    cout<<"l1DLat: " << l1Dlat;
+
     //Match size to latency for L1I cache
     int l1Ilat;
     switch(l1ISize){
@@ -172,7 +172,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             l1Dlat = l1Dlat;
             break;
     }
-    cout<<"l1DLat: " << l1Dlat;
+
     //Check L1I associativity
     switch (l1IAssoc){
         case 2:
@@ -210,7 +210,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l1DCell = l1Dlat - 1;
     int l1ICell = l1Ilat - 1;
     int l2Cell = l2lat - 5;
-    cout<<"l1DCell: " << l1DCell;
+
     //Pass calculated cells into collective string
     stringstream latencySettings;
     latencySettings << l1DCell << " " << l1ICell << " " << l2Cell;
@@ -412,14 +412,12 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
                 nextValue = nextValue;
                 break;
 		}
-        cout<<"VALUE after SELECT: " << nextValue;
+
 		//the if statments in the select will prevent the nextValue from being too big
 		if (nextValue == GLOB_dimensioncardinality[currentlyExploringDim]) {
 			currentDimDone = true;
 		}
-        cout<<"CURRENT SS   - "<< ss.str() ;
 		ss << nextValue << " ";
-        cout << "NEXTVALUE: " << nextValue;
 		// Fill in remaining independent params with remaining values from best config.
 		for (int dim = (currentlyExploringDim + 1); dim < (NUM_DIMS - NUM_DIMS_DEPENDENT); ++dim) {
 		    if((dim + 1) >= (NUM_DIMS - NUM_DIMS_DEPENDENT)){
@@ -439,7 +437,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 
 		// Populate this object using corresponding parameters from config.
 		ss << generateCacheLatencyParams(configSoFar);
-        ss << " ";
+        cout << "CURRENT SS _" << ss;
 		// Configuration is ready now.
 		nextconfiguration = ss.str();
 
