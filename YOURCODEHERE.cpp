@@ -333,7 +333,6 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		//Cache
 		//Core
 		//FPU
-		cout<<"currentlyExploringDim -" << currentlyExploringDim;
 
         switch (currentlyExploringDim){
 		    case 12:
