@@ -100,7 +100,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             break;
         default:
             //Set to largest size
-            l1Dlat = 6
+            l1Dlat = 6;
             break;
     }
     cout<<"l1DLat: " << l1Dlat;
