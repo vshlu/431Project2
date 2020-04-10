@@ -495,7 +495,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		            currentDimDone = false;
 		    }
 		}
-        cout<<"HERE";
+
 		// Signal that DSE is complete after this configuration.
 		if (currentlyExploringDim == (NUM_DIMS - NUM_DIMS_DEPENDENT))
 			isDSEComplete = true;
@@ -506,8 +506,8 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 					<< nextconfiguration << endl;
 			continue;
 		}
+        return nextconfiguration;
 	}
-
 	return nextconfiguration;
 }
 
