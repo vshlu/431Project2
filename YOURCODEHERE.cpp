@@ -412,7 +412,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
                 nextValue = nextValue;
                 break;
 		}
-        cout<<"HERE";
+
 		//the if statments in the select will prevent the nextValue from being too big
 		if (nextValue == GLOB_dimensioncardinality[currentlyExploringDim]) {
 			currentDimDone = true;
@@ -495,7 +495,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		            currentDimDone = false;
 		    }
 		}
-
+        cout<<"HERE";
 		// Signal that DSE is complete after this configuration.
 		if (currentlyExploringDim == (NUM_DIMS - NUM_DIMS_DEPENDENT))
 			isDSEComplete = true;
