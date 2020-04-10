@@ -396,7 +396,12 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
         cout << "NEXTVALUE: " << nextValue;
 		// Fill in remaining independent params with remaining values from best config.
 		for (int dim = (currentlyExploringDim + 1); dim < (NUM_DIMS - NUM_DIMS_DEPENDENT); ++dim) {
-			ss << extractConfigPararm(bestConfig, dim) << " ";
+		    if((dim + 1) >= (NUM_DIMS - NUM_DIMS_DEPENDENT)){
+                ss << extractConfigPararm(bestConfig, dim);
+		    }
+		    else{
+                ss << extractConfigPararm(bestConfig, dim) << " ";
+		    }
 		}
 
 		//
