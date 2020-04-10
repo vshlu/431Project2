@@ -299,7 +299,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 	std::string nextconfiguration = currentconfiguration;
 	// Check if proposed configuration has been seen before.
 	while (!validateConfiguration(nextconfiguration)|| GLOB_seen_configurations[nextconfiguration]) {
-cout<<"HERE";
+
 		// Check if DSE has been completed before and return current
 		// configuration.
 		if(isDSEComplete) {
@@ -320,7 +320,7 @@ cout<<"HERE";
 		for (int dim = 0; dim < currentlyExploringDim; ++dim) {
 			ss << extractConfigPararm(bestConfig, dim) << " ";
 		}
-
+        cout<<"HERE";
 		// Handling for currently exploring dimension.
 		//Dimensions to be explored:
 		//BP
