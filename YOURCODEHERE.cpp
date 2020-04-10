@@ -319,16 +319,19 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		        //there are 5 possible settings for branch predictor
 		        if(nextValue >= 0 && nextValue < 4){
 		            nextValue++;
+		            break;
 		        }
             case 1:
                 //There are only 2 possible settings for the core
                 if(nextValue >= 0 && nextValue < 1){
                     nextValue++;
+                    break;
                 }
             case 0:
                 //FPU has 4 possible settings
                 if(nextValue >= 0 && nextValue < 3){
                     nextValue++;
+                    break;
                 }
 
             //These are the cases for cache
@@ -339,17 +342,20 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
                 //ilblock - 4 settings
                 if(nextValue >= 0 && nextValue < 3){
                     nextValue++;
+                    break;
                 }
             case 5:
                 //ilsets - 9 settings
                 if(nextValue >= 0 && nextValue < 8){
                     nextValue++;
+                    break;
                 }
 
             case 6:
                 //ilassoc - 3 settings
                 if(nextValue >= 0 && nextValue < 2){
                     nextValue++;
+                    break;
                 }
 
             //now l1d settings
@@ -359,11 +365,13 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
                 //dl sets has 9 settings
                 if(nextValue >= 0 && nextValue < 8){
                     nextValue++;
+                    break;
                 }
             case 4:
                 //dl assoc has 3 settings
                 if(nextValue >= 0 && nextValue < 2){
                     nextValue++;
+                    break;
                 }
 
             //now u2 settings
@@ -371,20 +379,24 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
                 //u2 block has 4 settings
                 if(nextValue >= 0 && nextValue < 3){
                     nextValue++;
+                    break;
                 }
             case 7:
                 //u2 sets has 10 settings
                 if(nextValue >= 0 && nextValue < 9){
                     nextValue++;
+                    break;
                 }
             case 9:
                 //u2 assoc has 5 settings
                 if(nextValue >= 0 && nextValue < 4){
                     nextValue++;
+                    break;
                 }
             default:
                 //somehow we are in a setting we dont want so dont change next value and the next cycle will send a repeat config
                 nextValue = nextValue;
+                break;
 		}
         cout<<"VALUE after SELECT: " << nextValue;
 		//the if statments in the select will prevent the nextValue from being too big
