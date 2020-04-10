@@ -126,7 +126,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             break;
         default:
             //Set to largest size
-            l1Dlat = 6;
+            l1Ilat = 6;
     }
 
     //Match size to latency for L2 cache
@@ -152,7 +152,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             break;
         default:
             //Set to largest size
-            l1Dlat = 10;
+            l2lat = 10;
     }
 
     //Check associativity of caches to see if latency needs to be modified
