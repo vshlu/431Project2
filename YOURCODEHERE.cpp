@@ -297,6 +297,12 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 	// 5. GLOB_seen_configurations
 
 	std::string nextconfiguration = currentconfiguration;
+    string bestConfig;
+    if (optimizeforEXEC == 1)
+        bestConfig = bestEXECconfiguration;
+
+    if (optimizeforEDP == 1)
+        bestConfig = bestEDPconfiguration;
 	// Check if proposed configuration has been seen before.
     int nextValue = extractConfigPararm(bestConfig, currentlyExploringDim);
 	while (!validateConfiguration(nextconfiguration)|| GLOB_seen_configurations[nextconfiguration]) {
@@ -309,7 +315,6 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 
 		std::stringstream ss;
 
-		string bestConfig;
 		if (optimizeforEXEC == 1)
 			bestConfig = bestEXECconfiguration;
 
