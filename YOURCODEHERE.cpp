@@ -434,7 +434,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		// remaining parameters based on already decided independent ones.
 		//
 		string configSoFar = ss.str();
-        cout << "STRING BEFORE LATENCY PARAMS__-" << ss.str() << YEE;
+        cout << "STRING BEFORE LATENCY PARAMS__-" << ss.str() << "YEE";
 		// Populate this object using corresponding parameters from config.
 		ss << generateCacheLatencyParams(configSoFar);
         cout << "CURRENT SS _" << ss.str();
