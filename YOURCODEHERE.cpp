@@ -506,7 +506,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 					<< nextconfiguration << endl;
 			continue;
 		}
-        return nextconfiguration;
+        cout<<"HERE";
 	}
 	return nextconfiguration;
 }
