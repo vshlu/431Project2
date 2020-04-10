@@ -319,7 +319,6 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		        //there are 5 possible settings for branch predictor
 		        if(nextValue >= 0 && nextValue < 4){
 		            nextValue++;
-                    cout<<"VALUE after INCREMENT: " << nextValue;
 		        }
             case 1:
                 //There are only 2 possible settings for the core
@@ -387,7 +386,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
                 //somehow we are in a setting we dont want so dont change next value and the next cycle will send a repeat config
                 nextValue = nextValue;
 		}
-
+        cout<<"VALUE after SELECT: " << nextValue;
 		//the if statments in the select will prevent the nextValue from being too big
 		if (nextValue == GLOB_dimensioncardinality[currentlyExploringDim]) {
 			currentDimDone = true;
