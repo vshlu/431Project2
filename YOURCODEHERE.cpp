@@ -297,8 +297,8 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 	// 5. GLOB_seen_configurations
 
 	std::string nextconfiguration = currentconfiguration;
-	// Check if proposed configuration has been seen before.
-	while (!validateConfiguration(nextconfiguration) || GLOB_seen_configurations[nextconfiguration]) {
+	// Check if proposed configuration has been seen before. || GLOB_seen_configurations[nextconfiguration]
+	while (!validateConfiguration(nextconfiguration)) {
 
 		// Check if DSE has been completed before and return current
 		// configuration.
