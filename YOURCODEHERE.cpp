@@ -317,7 +317,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
         switch (currentlyExploringDim){
 		    case 12:
 		        //there are 5 possible settings for branch predictor
-		        if(nextValue >= 0 && nextValue < 3){
+		        if(nextValue >= 0 && nextValue < 4){
 		            nextValue++;
 		        }
             case 1:
@@ -391,7 +391,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		if (nextValue == GLOB_dimensioncardinality[currentlyExploringDim]) {
 			currentDimDone = true;
 		}
-
+        cout<<"CURRENT SS   - "<< ss ;
 		ss << nextValue << " ";
         cout << "NEXTVALUE: " << nextValue;
 		// Fill in remaining independent params with remaining values from best config.
