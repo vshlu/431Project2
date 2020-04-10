@@ -439,7 +439,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 
 		// Populate this object using corresponding parameters from config.
 		ss << generateCacheLatencyParams(configSoFar);
-
+        ss << " ";
 		// Configuration is ready now.
 		nextconfiguration = ss.str();
 
