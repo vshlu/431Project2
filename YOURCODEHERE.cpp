@@ -74,9 +74,9 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l1DSize = (((l1DBlockSize) * l1DSetSize) * l1DAssoc) / 1024;
     int l1ISize = (((l1IBlockSize) * l1ISetSize) * l1IAssoc) / 1024;
     int l2Size = (((l2BlockSize) * l2SetSize) * l2Assoc) / 1024;
-    cout << "l1DSize: " <<  l1DSize << " ";
-    cout << "l1ISize: " <<  l1ISize << " ";
-    cout << "l2Size: " <<  l2Size << " ";
+    //cout << "l1DSize: " <<  l1DSize << " ";
+    //cout << "l1ISize: " <<  l1ISize << " ";
+    //cout << "l2Size: " <<  l2Size << " ";
     //Match size to latency for L1D cache
     int l1Dlat;
     switch(l1DSize){
@@ -215,7 +215,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     stringstream latencySettings;
     latencySettings << " " << l1DCell << " " << l1ICell << " " << l2Cell;
 
-    cout << "latencySettings: " << latencySettings.str();
+   //cout << "latencySettings: " << latencySettings.str();
 	//
 	//YOUR CODE ENDS HERE
 	//
@@ -434,10 +434,8 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		// remaining parameters based on already decided independent ones.
 		//
 		string configSoFar = ss.str();
-        cout << "STRING BEFORE LATENCY PARAMS__-" << ss.str() << "YEE";
 		// Populate this object using corresponding parameters from config.
 		ss << generateCacheLatencyParams(configSoFar);
-        cout << "CURRENT SS _" << ss.str();
 		// Configuration is ready now.
 		nextconfiguration = ss.str();
 
