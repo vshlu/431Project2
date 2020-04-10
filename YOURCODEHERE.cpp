@@ -299,7 +299,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 	std::string nextconfiguration = currentconfiguration;
 	// Check if proposed configuration has been seen before.
 	while (!validateConfiguration(nextconfiguration)|| GLOB_seen_configurations[nextconfiguration]) {
-
+cout<<"HERE";
 		// Check if DSE has been completed before and return current
 		// configuration.
 		if(isDSEComplete) {
@@ -507,7 +507,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 			continue;
 		}
 	}
-	cout<<"STUCK";
+
 	return nextconfiguration;
 }
 
