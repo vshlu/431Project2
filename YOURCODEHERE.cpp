@@ -242,8 +242,8 @@ int validateConfiguration(std::string configuration) {
         flag = 0;
     }
 	//Make sure L1 instruction cache block size matches the instruction fetch queue size
-	if((l1DBlockSize / 8) != fetchQSize) {
-        flag = 0;
+	if((l1DBlockSize / 8) == fetchQSize) {
+        flag = 1;
     }
 	//Make sure L2 cache block size is at lease twice L1D (and L1I) cache size
 	if(l2BlockSize >= (2 * l1DBlockSize)) {
@@ -253,6 +253,7 @@ int validateConfiguration(std::string configuration) {
         if (l1DSize >= 2 && l1DSize <= 64 && l1ISize >= 2 && l1ISize <= 64 && l2Size >= 64 && l2Size <= 1024) {
             return 1;
         }
+        flag = 0;
     }
     return flag;
 }
