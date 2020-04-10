@@ -102,7 +102,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             //Set to largest size
             l1Dlat = 6;
     }
-
+    cout<<"l1DLat: " << l1Dlat;
     //Match size to latency for L1I cache
     int l1Ilat;
     switch(l1ISize){
@@ -129,7 +129,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             l1Dlat = 6;
     }
 
-    //Match size to latency for L1I cache
+    //Match size to latency for L2 cache
     int l2lat;
     switch(l2Size){
         case 32:
@@ -166,6 +166,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
             //directly mapped
             l1Dlat = l1Dlat;
     }
+    cout<<"l1DLat: " << l1Dlat;
     //Check L1I associativity
     switch (l1IAssoc){
         case 2:
@@ -195,7 +196,7 @@ std::string generateCacheLatencyParams(string halfBackedConfig) {
     int l1DCell = l1Dlat - 1;
     int l1ICell = l1Ilat - 1;
     int l2Cell = l2lat - 5;
-
+    cout<<"l1DCell: " << l1DCell;
     //Pass calculated cells into collective string
     stringstream latencySettings;
     latencySettings << l1DCell << " " << l1ICell << " " << l2Cell;
@@ -392,7 +393,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		}
 
 		ss << nextValue << " ";
-
+        cout << "NEXTVALUE: " << nextValue;
 		// Fill in remaining independent params with remaining values from best config.
 		for (int dim = (currentlyExploringDim + 1); dim < (NUM_DIMS - NUM_DIMS_DEPENDENT); ++dim) {
 			ss << extractConfigPararm(bestConfig, dim) << " ";
