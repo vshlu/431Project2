@@ -327,12 +327,14 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		//Cache
 		//Core
 		//FPU
+		cout<<"currentlyExploringDim -" << currentlyExploringDim;
 		int nextValue = extractConfigPararm(bestConfig, currentlyExploringDim);
         switch (currentlyExploringDim){
 		    case 12:
 		        //there are 5 possible settings for branch predictor
 		        if(nextValue >= 0 && nextValue < 4){
 		            nextValue++;
+		            cout<<"INCREMENT";
 		            break;
 		        }
             case 1:
@@ -506,7 +508,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 					<< nextconfiguration << endl;
 			continue;
 		}
-        cout<<"HERE";
+        //cout<<"HERE";
 	}
 	return nextconfiguration;
 }
