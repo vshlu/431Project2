@@ -28,7 +28,7 @@ using namespace std;
  * Feel free to create more global variables to track progress of your
  * heuristic.
  */
-unsigned int currentlyExploringDim = 0;
+unsigned int currentlyExploringDim = 12;
 bool currentDimDone = false;
 bool isDSEComplete = false;
 
@@ -282,7 +282,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 
 	std::string nextconfiguration = currentconfiguration;
 	// Check if proposed configuration has been seen before.
-	while (GLOB_seen_configurations[nextconfiguration]) {
+	while (!validateConfiguration(nextconfiguration) || GLOB_seen_configurations[nextconfiguration]) {
 
 		// Check if DSE has been completed before and return current
 		// configuration.
@@ -305,22 +305,96 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 			ss << extractConfigPararm(bestConfig, dim) << " ";
 		}
 
-		// Handling for currently exploring dimension. This is a very dumb
-		// implementation.
-		int nextValue = extractConfigPararm(nextconfiguration,
-				currentlyExploringDim) + 1;
+		// Handling for currently exploring dimension.
+		//Dimensions to be explored:
+		//BP
+		//Cache
+		//Core
+		//FPU
+		int nextValue = extractConfigPararm(bestConfig, currentlyExploringDim);
+        switch (currentlyExploringDim){
+		    case 12:
+		        //there are 5 possible settings for branch predictor
+		        if(nextValue >= 0 && nextValue < 3){
+		            nextValue++;
+		        }
+            case 1:
+                //There are only 2 possible settings for the core
+                if(nextValue >= 0 && nextValue < 1){
+                    nextValue++;
+                }
+            case 0:
+                //FPU has 4 possible settings
+                if(nextValue >= 0 && nextValue < 3){
+                    nextValue++;
+                }
 
-		if (nextValue >= GLOB_dimensioncardinality[currentlyExploringDim]) {
-			nextValue = GLOB_dimensioncardinality[currentlyExploringDim] - 1;
+            //These are the cases for cache
+            //There are many different things to change for the cache
+
+            //begin with l1i settings
+            case 2:
+                //ilblock - 4 settings
+                if(nextValue >= 0 && nextValue < 3){
+                    nextValue++;
+                }
+            case 5:
+                //ilsets - 9 settings
+                if(nextValue >= 0 && nextValue < 8){
+                    nextValue++;
+                }
+
+            case 6:
+                //ilassoc - 3 settings
+                if(nextValue >= 0 && nextValue < 2){
+                    nextValue++;
+                }
+
+            //now l1d settings
+
+            //since l1 block is shared for i and d cache we do not need to reiterate
+            case 3:
+                //dl sets has 9 settings
+                if(nextValue >= 0 && nextValue < 8){
+                    nextValue++;
+                }
+            case 4:
+                //dl assoc has 3 settings
+                if(nextValue >= 0 && nextValue < 2){
+                    nextValue++;
+                }
+
+            //now u2 settings
+            case 8:
+                //u2 block has 4 settings
+                if(nextValue >= 0 && nextValue < 3){
+                    nextValue++;
+                }
+            case 7:
+                //u2 sets has 10 settings
+                if(nextValue >= 0 && nextValue < 9){
+                    nextValue++;
+                }
+            case 9:
+                //u2 assoc has 5 settings
+                if(nextValue >= 0 && nextValue < 4){
+                    nextValue++;
+                }
+            default:
+                //somehow we are in a setting we dont want so dont change next value and the next cycle will send a repeat config
+                nextValue = nextValue;
+		}
+
+		//the if statments in the select will prevent the nextValue from being too big
+		if (nextValue == GLOB_dimensioncardinality[currentlyExploringDim]) {
 			currentDimDone = true;
 		}
 
 		ss << nextValue << " ";
 
-		// Fill in remaining independent params with 0.
-		for (int dim = (currentlyExploringDim + 1);
-				dim < (NUM_DIMS - NUM_DIMS_DEPENDENT); ++dim) {
-			ss << "0 ";
+		// Fill in remaining independent params with remaining values from best config.
+		for (int dim = (currentlyExploringDim + 1); dim < (NUM_DIMS - NUM_DIMS_DEPENDENT); ++dim) {
+			ss << extractConfigPararm(bestConfig, dim) << " ";
 		}
 
 		//
@@ -337,9 +411,60 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		nextconfiguration = ss.str();
 
 		// Make sure we start exploring next dimension in next iteration.
+		//order of exploration
+		//BP
+		//Cache
+		//Core
+		//FPU
 		if (currentDimDone) {
-			currentlyExploringDim++;
-			currentDimDone = false;
+		    select(currentlyExploringDim){
+		        case 12:
+		            //we have finished exploring the BP settings and are now onto the cache
+                    currentlyExploringDim = 2;
+                    currentDimDone = false;
+                //now we must check all the conditions for the cache
+		        case 2:
+		            //finished with l1 block, move onto l1 sets
+		            currentlyExploringDim = 5;
+		            currentDimDone = false;
+                case 5:
+                    //finished with l1 sets, move onto l1 assoc
+                    currentlyExploringDim = 6;
+                    currentDimDone = false;
+
+                case 6:
+                    //finished with l1 assoc, move onto l1d sets
+                    currentlyExploringDim = 3;
+                    currentDimDone = false;
+
+                //now l1d settings
+
+                //since l1 block is shared for i and d cache we do not need to reiterate
+                case 3:
+                    //finished with l1d sets, move onto l1d assoc
+                    currentlyExploringDim = 4;
+                    currentDimDone = false;
+                case 4:
+                    //finished with l1d assoc, move onto u2 settings
+                    currentlyExploringDim = 8;
+                    currentDimDone = false;
+
+                //now u2 settings
+                case 8:
+                    //finished with u2 blocks, move onto u2 sets
+                    currentlyExploringDim = 7;
+                    currentDimDone = false;
+                case 7:
+                    //finished with u2 sets, move onto u2 assoc
+                    currentlyExploringDim = 9;
+                    currentDimDone = false;
+                case 9:
+                    //we are finished
+                    currentDimDone = false;
+		        default:
+		            //in this case something is wrong so we will end the current exploration
+		            currentDimDone = false
+		    }
 		}
 
 		// Signal that DSE is complete after this configuration.
@@ -350,7 +475,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		if (!validateConfiguration(nextconfiguration)) {
 			cerr << "Exiting with error; Configuration Proposal invalid: "
 					<< nextconfiguration << endl;
-			exit(-1);
+			continue;
 		}
 	}
 	return nextconfiguration;
