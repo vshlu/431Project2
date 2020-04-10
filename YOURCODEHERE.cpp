@@ -318,8 +318,8 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		    case 12:
 		        //there are 5 possible settings for branch predictor
 		        if(nextValue >= 0 && nextValue < 4){
-		            cout<<"NEXT VALUE BEFORE INCREMENT: " << nextValue;
 		            nextValue++;
+                    cout<<"VALUE after INCREMENT: " << nextValue;
 		        }
             case 1:
                 //There are only 2 possible settings for the core
