@@ -417,7 +417,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		//Core
 		//FPU
 		if (currentDimDone) {
-		    select(currentlyExploringDim){
+		    switch (currentlyExploringDim){
 		        case 12:
 		            //we have finished exploring the BP settings and are now onto the cache
                     currentlyExploringDim = 2;
@@ -463,7 +463,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
                     currentDimDone = false;
 		        default:
 		            //in this case something is wrong so we will end the current exploration
-		            currentDimDone = false
+		            currentDimDone = false;
 		    }
 		}
 
