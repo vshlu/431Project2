@@ -298,6 +298,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 
 	std::string nextconfiguration = currentconfiguration;
 	// Check if proposed configuration has been seen before.
+    int nextValue = extractConfigPararm(bestConfig, currentlyExploringDim);
 	while (!validateConfiguration(nextconfiguration)|| GLOB_seen_configurations[nextconfiguration]) {
 
 		// Check if DSE has been completed before and return current
@@ -328,7 +329,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		//Core
 		//FPU
 		cout<<"currentlyExploringDim -" << currentlyExploringDim;
-		int nextValue = extractConfigPararm(bestConfig, currentlyExploringDim);
+
         switch (currentlyExploringDim){
 		    case 12:
 		        //there are 5 possible settings for branch predictor
