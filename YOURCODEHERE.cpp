@@ -391,7 +391,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		if (nextValue == GLOB_dimensioncardinality[currentlyExploringDim]) {
 			currentDimDone = true;
 		}
-        cout<<"CURRENT SS   - "<< ss ;
+        cout<<"CURRENT SS   - "<< ss.str() ;
 		ss << nextValue << " ";
         cout << "NEXTVALUE: " << nextValue;
 		// Fill in remaining independent params with remaining values from best config.
