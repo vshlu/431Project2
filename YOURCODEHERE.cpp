@@ -339,7 +339,7 @@ std::string generateNextConfigurationProposal(std::string currentconfiguration,
 		        //there are 5 possible settings for branch predictor
 		        if(nextValue >= 0 && nextValue < 4){
 		            nextValue = nextValue + 1;
-		            cout<<"NEXT VALUE__"<<nextValue;
+		            //cout<<"NEXT VALUE__"<<nextValue;
 		            break;
 		        }
             case 1:
